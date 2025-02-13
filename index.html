@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Importa a biblioteca Phaser -->
+	<script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
+	<title>Exercício do Pássaro</title>
+	<style>
+		/* Estiliza o corpo da página para centralizar o conteúdo */
+		body {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+// Configuração do jogo Phaser
+var config = {
+    type: Phaser.AUTO, // Tipo de renderização (automático)
+    width: 800, // Largura do jogo
+    height: 600, // Altura do jogo
+    scene: {
+        preload: preload, // Função de pré-carregamento
+        create: create, // Função de criação
+        update: update // Função de atualização
+    }
+};
+
+// Cria uma nova instância do jogo Phaser com a configuração especificada
+var game = new Phaser.Game(config);
+
+var passarinho; // Variável para armazenar o sprite do passarinho
+var passarinho2; // Variável para armazenar o sprite do passarinho2
+var passarinho3; // Variável para armazenar o sprite do passarinho3
+
+// Função de pré-carregamento para carregar os assets do jogo
+function preload() {
+    this.load.image('bg', 'assets/floresta.jpg'); // Carrega a imagem de fundo
+    this.load.spritesheet('bird', 'assets/bird-red.png', { frameWidth: 75, frameHeight: 75 }); // Carrega o spritesheet do passarinho1
+    this.load.spritesheet('bird2', 'assets/bird-green.png', { frameWidth: 75, frameHeight: 75 }); // Carrega o spritesheet do passarinho2
+    this.load.spritesheet('bird3', 'assets/bird-purple.png', { frameWidth: 75, frameHeight: 75 }); // Carrega o spritesheet do passarinho3
+}
+
+// Função de criação para inicializar os objetos do jogo
+function create() {
+    this.add.image(400, 300, 'bg').setScale(1.2); // Adiciona a imagem de fundo e ajusta a escala
+    passarinho = this.add.sprite(100, 300, 'bird').setScale(1.3); // Adiciona o sprite do passarinho e ajusta a escala1
+    passarinho2 = this.add.sprite(100, 300, 'bird2').setScale(1.3); // Adiciona o sprite do passarinho e ajusta a escala2
+    passarinho3 = this.add.sprite(100, 300, 'bird3').setScale(1.3); // Adiciona o sprite do passarinho e ajusta a escala3
+   
+    // Cria a animação de voo do passarinho
+    this.anims.create({
+        key: 'fly', // Nome da animação
+        frames: this.anims.generateFrameNumbers('bird', { start: 0, end: 7 }), // Frames da animação passaro vermelho
+        frameRate: 10, // Taxa de quadros por segundo
+        repeat: -1 // Repetição infinita
+    });
+
+    // Cria a animação de voo do passarinho2
+    this.anims.create({
+        key: 'fly2', // Nome da animação
+        frames: this.anims.generateFrameNumbers('bird2', { start: 0, end: 7 }), // Frames da animação passaro verde
+        frameRate: 10, // Taxa de quadros por segundo
+        repeat: -1 // Repetição infinita
+    });
+
+    // Cria a animação de voo do passarinho3 
+    this.anims.create({
+        key: 'fly3', // Nome da animação
+        frames: this.anims.generateFrameNumbers('bird3', { start: 0, end: 7 }), // Frames da animação passaro roxo
+        frameRate: 10, // Taxa de quadros por segundo
+        repeat: -1 // Repetição infinita
+    });
+
+    // Inicia a animação de voo dos passarinhos
+    passarinho.anims.play('fly', true);
+    passarinho2.anims.play('fly2', true);
+    passarinho3.anims.play('fly3', true);
+
+    // Variáveis de controle de movimento
+    passarinho.ida = true;
+    passarinho.subindo = true;
+
+    passarinho2.ida = true;
+    passarinho2.subindo = true;
+
+    passarinho3.ida = true;
+    passarinho3.subindo = true;
+
+}
+
+// Função de atualização para atualizar o estado do jogo a cada frame
+function update() {
+    
+    //movimento do passarinho 1   
+    // Loop para o movimento horizontal1
+    for (let i = 0; i < 3; i++) { 
+        if (passarinho.volta) {
+            passarinho.x += 1; 
+        } else {
+            passarinho.x -= 1;
+        }
+    }
+
+    // Troca de direção horizontal ao atingir os limites1
+    if (passarinho.x >= 780) {
+        passarinho.setFlip(true, false);
+        passarinho.volta = false;
+    } else if (passarinho.x <= 50) {
+        passarinho.setFlip(false, false);
+        passarinho.volta = true;
+    }
+
+    // Loop para o movimento vertical1
+    let contador = 0;
+    while (contador < 1) {  
+        if (passarinho.descendo) {
+            passarinho.y -= 1;
+        } else {
+            passarinho.y += 1;
+        }
+        contador++;
+    }
+
+    // Troca de direção vertical ao atingir os limites1
+    if (passarinho.y <= 20) {
+        passarinho.descendo = false;
+    } else if (passarinho.y >= 580) {
+        passarinho.descendo = true;
+    }
+
+    //movimento do passarinho 2
+    // Loop para o movimento horizontal2
+ for (let i = 0; i < 3; i++) { 
+        if (passarinho2.ida) {
+            passarinho2.x += 1; 
+        } else {
+            passarinho2.x -= 1;
+        }
+    }
+
+    // Troca de direção horizontal ao atingir os limites2
+    if (passarinho2.x >= 780) {
+        passarinho2.setFlip(true, false);
+        passarinho2.ida = false;
+    } else if (passarinho2.x <= 50) {
+        passarinho2.setFlip(false, false);
+        passarinho2.ida = true;
+    }
+
+    // Loop para o movimento vertical2
+    let contador2 = 0;
+    while (contador2 < 1) {  
+        if (passarinho2.subindo) {
+            passarinho2.y -= 2;
+        } else {
+            passarinho2.y += 2;
+        }
+        contador2++;
+    }
+
+    // Troca de direção vertical ao atingir os limites1
+    if (passarinho2.y <= 20) {
+        passarinho2.subindo = false;
+    } else if (passarinho2.y >= 580) {
+        passarinho2.subindo = true;
+    }
+
+    //movimento do passarinho 3
+    // Loop para o movimento horizontal3
+    for (let i = 0; i < 3; i++) { 
+        if (passarinho3.ida) {
+            passarinho3.x += 1; 
+        } else {
+            passarinho3.x -= 1;
+        }
+    }
+
+    // Troca de direção horizontal ao atingir os limites3
+    if (passarinho3.x >= 780) {
+        passarinho3.setFlip(true, false);
+        passarinho3.ida = false;
+    } else if (passarinho3.x <= 50) {
+        passarinho3.setFlip(false, false);
+        passarinho3.ida = true;
+    }
+
+    // Loop para o movimento vertical3
+    let contador3 = 0;
+    while (contador3 < 1) {  
+        if (passarinho3.subindo) {
+            passarinho3.y -= 3;
+        } else {
+            passarinho3.y += 3;
+        }
+        contador3++;
+    }
+
+    // Troca de direção vertical ao atingir os limites3
+    if (passarinho3.y <= 20) {
+        passarinho3.subindo = false;
+    } else if (passarinho3.y >= 580) {
+        passarinho3.subindo = true;
+    }
+
+}
+
+</script>
+
+</body>
+</html>
